@@ -85,7 +85,7 @@
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => footprint.classList.toggle('in-view', e.isIntersecting));
-      }, { threshold: 0.35 });
+      }, { threshold: 0.2 });
       io.observe(footprint);
     } else {
       footprint.classList.add('in-view');

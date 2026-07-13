@@ -38,10 +38,22 @@ a{ color:inherit; }
 
 @media (prefers-reduced-motion: reduce){
   *{ animation-duration:0.001ms !important; animation-delay:0ms !important; transition-duration:0.001ms !important; transition-delay:0ms !important; }
-  .hero-content h1, .hero-p, .hero .btn-secondary, .hp-text h1, .hp-text p, .hp-cta{ opacity:1 !important; transform:none !important; }
+  /* Banner content: no slide / no image zoom, but keep a gentle opacity-only
+     fade tied to the existing .in-view / .fade-out classes so reduced-motion
+     visitors still get an entrance (not a static snap). The 0.7s opacity
+     transition (specificity 0,1,1 + !important) overrides the * reset above;
+     transform:none kills the translateY slide and the JS image zoom. */
+  .hero-content h1, .hero-p, .hero .btn-secondary, .hp-text h1, .hp-text p, .hp-cta{
+    transform:none !important; transition:opacity 0.7s ease !important;
+  }
   .hero > img, #hero-root > img{ transform:none !important; }
-  .fp-line{ stroke-dashoffset:0 !important; }
-  .fp-city{ opacity:1 !important; }
+  /* Footprint map: no line-draw / no transforms, but keep a gentle opacity
+     fade-in so reduced-motion visitors still see the network "arrive".
+     .fp-line/.fp-city (specificity 0,1,0) override the * duration reset above. */
+  .fp-line{ stroke-dashoffset:0 !important; opacity:0; transition:opacity 0.7s ease !important; }
+  .fp-city{ opacity:0; transition:opacity 0.7s ease !important; }
+  .footprint.in-view .fp-line,
+  .footprint.in-view .fp-city{ opacity:1 !important; }
 }
 
 /* ===== Secondary button (site-wide standard) ===== */
