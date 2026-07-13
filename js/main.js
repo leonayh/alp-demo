@@ -13,6 +13,16 @@
   let lang = 'EN';
   let lastY = window.scrollY;
 
+  // Background-image zoom amplitude. Reduced-motion visitors get a gentler
+  // 1 -> 1.08 zoom (vs 1 -> 1.2) rather than none, per the client's request.
+  const reduceMotion = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let zoomAmp = reduceMotion ? 0.08 : 0.2;
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-reduced-motion: reduce)')
+      .addEventListener('change', (e) => { zoomAmp = e.matches ? 0.08 : 0.2; onScroll(); });
+  }
+
   function setMenuOpen(open) {
     menuOpen = open;
     menuOverlay.classList.toggle('open', open);
@@ -51,7 +61,7 @@
         img.style.transform = 'scale(1)';
       } else {
         const p = Math.min(1, rel / vh);
-        img.style.transform = 'scale(' + (1 + p * 0.2).toFixed(4) + ')';
+        img.style.transform = 'scale(' + (1 + p * zoomAmp).toFixed(4) + ')';
       }
       // Scroll-triggered stagger fade-in: this section is the "next screen"
       // for the one above it, so its own title/copy/button only start

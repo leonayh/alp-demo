@@ -46,7 +46,10 @@ a{ color:inherit; }
   .hero-content h1, .hero-p, .hero .btn-secondary, .hp-text h1, .hp-text p, .hp-cta{
     transform:none !important; transition:opacity 0.7s ease !important;
   }
-  .hero > img, #hero-root > img{ transform:none !important; }
+  /* Per request (B): keep a (smaller) background zoom even under reduced motion.
+     Re-enable the scroll-linked transform; JS applies a gentler amplitude
+     (1->1.08 instead of 1->1.2) when reduced motion is on — see main.js. */
+  .hero > img, #hero-root > img{ transition:transform 0.15s linear !important; }
   /* Footprint map: no line-draw / no transforms, but keep a gentle opacity
      fade-in so reduced-motion visitors still see the network "arrive".
      .fp-line/.fp-city (specificity 0,1,0) override the * duration reset above. */
