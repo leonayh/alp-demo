@@ -28,7 +28,18 @@
     menuOverlay.classList.toggle('open', open);
   }
 
-  menuToggle.addEventListener('click', () => setMenuOpen(!menuOpen));
+  // NOTE: EN (language), Contact, the hamburger menu and the footer links
+  // (social icons + Privacy Policy) are placeholders — these features aren't
+  // built yet, so their click actions are intentionally disabled (no feedback
+  // on click). preventDefault also stops the anchors from jumping to top.
+  // Re-enable the handlers below once the features are ready.
+  const placeholders = [langToggle, menuToggle, document.querySelector('.nav-contact')]
+    .concat(Array.from(document.querySelectorAll('.site-footer a')));
+  placeholders.forEach((el) => {
+    if (el) el.addEventListener('click', (e) => e.preventDefault());
+  });
+
+  // menuToggle.addEventListener('click', () => setMenuOpen(!menuOpen));
   menuClose.addEventListener('click', () => setMenuOpen(false));
   menuOverlay.querySelectorAll('.menu-link').forEach((link) => {
     link.addEventListener('click', (e) => {
@@ -37,11 +48,11 @@
     });
   });
 
-  langToggle.addEventListener('click', () => {
-    lang = lang === 'EN' ? 'TH' : 'EN';
-    langLabel.textContent = lang === 'EN' ? 'English' : 'ไทย';
-    langToggle.classList.toggle('open');
-  });
+  // langToggle.addEventListener('click', () => {
+  //   lang = lang === 'EN' ? 'TH' : 'EN';
+  //   langLabel.textContent = lang;
+  //   langToggle.classList.toggle('open');
+  // });
 
   function onScroll() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
