@@ -1,0 +1,317 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&display=swap');
+
+:root{
+  --color-ink:#0A0A0A;
+  --color-offwhite:#F4F4F2;
+  --color-accent:#FAF054;
+  --border-outline:#4A4A4A;
+
+  --font-display:'Outfit','Helvetica Neue',Arial,sans-serif;
+  --font-body:'Outfit','Avenir Next','Helvetica Neue',Arial,sans-serif;
+
+  --gutter:48px;
+  --menu-pad:80px;
+  --container-max:1824px;
+  --edge:max(var(--gutter), (100% - var(--container-max)) / 2);
+}
+
+@media (max-width:1024px){
+  :root{ --gutter:24px; --menu-pad:48px; }
+}
+@media (max-width:768px){
+  :root{ --gutter:12px; --menu-pad:24px; }
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html,body{ background:var(--color-ink); }
+
+body{
+  font-family:var(--font-body);
+  color:var(--color-offwhite);
+}
+
+a{ color:inherit; }
+
+/* ===== Motion ===== */
+@keyframes heroFade{ from{ opacity:0; } to{ opacity:1; } }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.001ms !important; animation-delay:0ms !important; transition-duration:0.001ms !important; transition-delay:0ms !important; }
+  .hero-content h1, .hero-p, .hero .btn-secondary, .hp-text h1, .hp-text p, .hp-cta{ opacity:1 !important; transform:none !important; }
+  .hero > img, #hero-root > img{ transform:none !important; }
+  .fp-line{ stroke-dashoffset:0 !important; }
+  .fp-city{ opacity:1 !important; }
+}
+
+/* ===== Secondary button (site-wide standard) ===== */
+.btn-secondary{
+  display:inline-flex; align-items:center; gap:16px; padding:16px 30px;
+  border:1px solid rgba(244,244,242,0.5); background:rgba(0,0,0,0.1); border-radius:2px;
+  cursor:pointer; color:var(--color-offwhite); text-decoration:none;
+  font-family:var(--font-display); font-size:16px; font-weight:200; letter-spacing:0.08em; text-transform:uppercase;
+  position:relative; overflow:hidden; z-index:0;
+  transition:color 0.3s ease, border-color 0.3s ease;
+}
+.btn-secondary::before{
+  content:''; position:absolute; inset:0; background:var(--color-accent); z-index:-1;
+  transform:scaleX(0); transform-origin:left; transition:transform 0.6s cubic-bezier(0.42,0,0.58,1);
+}
+.btn-secondary:hover{ color:#0A0A0A; border-color:var(--color-accent); }
+.btn-secondary:hover::before{ transform:scaleX(1); }
+
+/* ===== Scroll progress bar ===== */
+#hp-progress{
+  position:fixed; top:20px; left:var(--edge); right:var(--edge); height:2px;
+  background:rgba(255,255,255,0.12); z-index:30; pointer-events:none;
+  transition:transform 0.4s ease, opacity 0.4s ease;
+}
+#hp-progress.nav-hidden{ transform:translateY(-30px); opacity:0; }
+#hp-progress-fill{ height:100%; width:0%; background:rgba(255,255,255,0.55); transition:width 0.1s linear; }
+
+/* ===== Top nav ===== */
+#hp-nav{
+  position:fixed; top:0; left:0; right:0; z-index:25;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:34px var(--edge) 30px;
+  background:linear-gradient(180deg, #000 0%, rgba(0,0,0,0) 100%);
+  animation:heroFade 0.9s ease both;
+  transition:transform 0.4s ease, opacity 0.4s ease;
+  will-change:transform;
+}
+#hp-nav.nav-hidden{ transform:translateY(-100%); opacity:0; pointer-events:none; }
+
+.nav-right{ display:flex; align-items:center; gap:22px; }
+
+.nav-link{
+  font-family:var(--font-display); font-size:15px; font-weight:300; line-height:1;
+  letter-spacing:0.02em; color:var(--color-offwhite); text-decoration:none; transition:color 0.25s ease;
+  background:transparent; border:none; cursor:pointer; padding:0;
+}
+.nav-link:hover{ color:var(--color-accent); }
+
+.nav-divider{ width:1px; height:14px; background:rgba(244,244,242,0.3); }
+
+.lang-toggle{ display:flex; align-items:center; gap:8px; }
+.lang-toggle svg{ transition:transform 0.22s ease; }
+.lang-toggle.open svg{ transform:rotate(180deg); }
+
+.menu-toggle{ display:flex; align-items:center; justify-content:center; width:24px; height:24px; }
+
+@media (max-width:768px){
+  .nav-contact, .nav-contact + .nav-divider{ display:none; }
+}
+
+/* ===== Menu overlay ===== */
+.menu-overlay{
+  position:fixed; inset:0; z-index:20; background:rgba(10,10,10,0.97);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  display:flex; flex-direction:column; justify-content:center; padding:0 var(--menu-pad);
+  opacity:0; pointer-events:none; transition:opacity 0.4s ease;
+}
+.menu-overlay.open{ opacity:1; pointer-events:auto; }
+
+.menu-close{
+  position:absolute; top:30px; right:48px; width:42px; height:42px;
+  display:flex; align-items:center; justify-content:center;
+  background:transparent; border:1px solid rgba(244,244,242,0.3); border-radius:2px; cursor:pointer;
+  transition:border-color 0.25s ease;
+}
+.menu-close:hover{ border-color:var(--color-accent); }
+
+.menu-label{
+  font-family:var(--font-display); font-size:11px; letter-spacing:0.24em; text-transform:uppercase;
+  color:rgba(244,244,242,0.4); margin-bottom:30px;
+}
+
+.menu-links{ display:flex; flex-direction:column; gap:6px; }
+.menu-link{
+  font-family:var(--font-display); font-weight:200; font-size:clamp(40px,6vw,72px); line-height:1.1;
+  letter-spacing:0.02em; text-transform:uppercase; color:#FFFFFF; text-decoration:none; width:fit-content;
+  transition:color 0.25s ease, padding-left 0.3s ease;
+}
+.menu-link:hover{ color:var(--color-accent); padding-left:18px; }
+
+/* ===== Sticky-stack hero banners ===== */
+.hero{
+  position:sticky; top:0; width:100%; height:100vh; min-height:100vh; overflow:hidden;
+  display:flex; align-items:center;
+}
+.hero > img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center;
+  transform-origin:center; transition:transform 0.15s linear; will-change:transform;
+}
+.hero-content{ position:relative; z-index:5; width:100%; padding:0 var(--edge); max-width:980px; }
+
+/* Reveal/cover state — driven by transitions (not animations) so the effect
+   is fully reversible: scrolling back interpolates smoothly from whatever
+   opacity/position the element is currently at, instead of restarting from
+   a fixed keyframe and causing a jump. */
+.hero-content h1, .hero-p, .hero .btn-secondary{
+  font-weight:200; opacity:0; transform:translateY(22px);
+  transition:opacity 0.9s cubic-bezier(0.22,0.61,0.36,1), transform 0.9s cubic-bezier(0.22,0.61,0.36,1);
+}
+.hero-content h1{
+  font-family:var(--font-display); font-size:clamp(32px,3.4vw,42px); line-height:120%;
+  letter-spacing:0.04em; text-transform:uppercase; color:#fff; margin-bottom:18px;
+  transition-delay:0.15s;
+}
+.hero-p{
+  font-family:var(--font-body); font-size:clamp(15px,1.5vw,18px); line-height:150%;
+  letter-spacing:0.04em; color:#fff; max-width:640px; margin-bottom:32px;
+  transition-delay:0.28s;
+}
+.hero .btn-secondary{ transition-delay:0.40s; }
+
+/* Revealed — the incoming screen has risen to cover ~0.5vh of this section */
+.hero.in-view .hero-content h1,
+.hero.in-view .hero-p,
+.hero.in-view .btn-secondary{
+  opacity:1; transform:translateY(0);
+}
+
+/* Covered — the next screen has risen to cover 0.2vh: fade out upward in 0.45s.
+   Declared after the .in-view rule so it wins the (equal-specificity) tie while
+   both classes are set; removing this class reverts to the rule above and the
+   content fades back in from wherever it currently is — fully reversible. */
+.hero.fade-out .hero-content h1, .hero.fade-out .hero-p, .hero.fade-out .btn-secondary{
+  opacity:0; transform:translateY(-24px);
+  transition:opacity 0.45s cubic-bezier(0.22,0.61,0.36,1), transform 0.45s cubic-bezier(0.22,0.61,0.36,1);
+}
+
+.hero-center{ justify-content:center; }
+.hero-center::after{
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background:rgba(0,0,0,0.30);
+}
+.hero-center .hero-content{ text-align:center; }
+.hero-center .hero-p{ margin-left:auto; margin-right:auto; }
+.hero-center .btn-secondary{ margin-left:auto; margin-right:auto; }
+
+.hero-topleft{ align-items:flex-start; justify-content:flex-start; }
+.hero-topleft .hero-content{ text-align:left; padding-top:120px; }
+.hero-topleft::after{
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(90deg, rgba(0,0,0,0.40) 20%, rgba(0,0,0,0.10) 80%);
+}
+
+/* ===== First screen (hero-root) — centered intro ===== */
+#hero-root{
+  position:sticky; top:0; width:100%; height:100vh; min-height:100vh; overflow:hidden;
+  background:var(--color-ink);
+}
+#hero-root > img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center;
+  transform-origin:center; transition:transform 0.15s linear; will-change:transform;
+}
+.hp-content{
+  position:absolute; inset:0; z-index:5; width:100%; padding:0 var(--gutter);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+}
+.hp-text{ max-width:760px; text-align:center; }
+
+/* Same reversible reveal/cover pattern as the other banners (see .hero-content
+   h1 above) — #hero-root already receives .in-view (on load) and .fade-out
+   (once banner 2 covers 0.2vh) from the shared scroll handler in main.js. */
+.hp-text h1, .hp-text p, .hp-cta{
+  opacity:0; transform:translateY(22px);
+  transition:opacity 0.9s ease, transform 0.9s ease;
+}
+.hp-text h1{
+  font-family:var(--font-display); font-weight:200; font-size:clamp(36px,4.2vw,52px); line-height:1;
+  letter-spacing:0.04em; text-transform:uppercase; color:#FFFFFF; margin-bottom:22px;
+  transition-delay:0.14s;
+}
+.hp-text p{
+  font-family:var(--font-body); font-size:clamp(15px,1.5vw,18px); line-height:150%; font-weight:200;
+  letter-spacing:0.04em; color:#FFFFFF; max-width:640px; margin:0 auto 40px;
+  transition-delay:0.24s;
+}
+.hp-cta{ transition-delay:0.34s; }
+
+#hero-root.in-view .hp-text h1,
+#hero-root.in-view .hp-text p,
+#hero-root.in-view .hp-cta{
+  opacity:1; transform:translateY(0);
+}
+
+#hero-root.fade-out .hp-text h1, #hero-root.fade-out .hp-text p, #hero-root.fade-out .hp-cta{
+  opacity:0; transform:translateY(-24px);
+  transition:opacity 0.45s cubic-bezier(0.22,0.61,0.36,1), transform 0.45s cubic-bezier(0.22,0.61,0.36,1);
+}
+
+@media (max-width:768px){
+  .hp-text{ max-width:none; width:100%; }
+  .hp-cta{ width:fit-content; }
+}
+
+/* ===== Global Footprint (bottom section) ===== */
+.footprint{
+  position:relative; z-index:6; width:100%; min-height:100vh;
+  background:var(--color-ink); overflow:hidden;
+  display:flex; align-items:center;
+}
+.footprint-content{
+  position:relative; z-index:2; width:100%; max-width:896px;
+  padding:0 var(--edge);
+}
+.footprint-content h2{
+  font-family:var(--font-display); font-weight:300;
+  font-size:clamp(32px,3.6vw,48px); line-height:1.4; letter-spacing:0.01em;
+  text-transform:uppercase; color:#fff; margin-bottom:26px;
+}
+.footprint-content p{
+  font-family:var(--font-body); font-weight:200;
+  font-size:clamp(15px,1.5vw,16px); line-height:1.8; letter-spacing:0.03em;
+  color:rgba(244,244,242,0.85); margin-bottom:40px;
+}
+.footprint-content .btn-secondary{ padding:14px 26px; }
+
+/* Dotted world map on the right */
+.footprint-map{
+  position:absolute; top:50%; right:0; transform:translateY(-50%);
+  width:56%; max-width:820px; aspect-ratio:767 / 485;
+  pointer-events:none; z-index:1;
+}
+.footprint-map .fp-svg{
+  position:absolute; inset:0; width:100%; height:100%; display:block; overflow:visible;
+}
+.fp-label{
+  font-family:var(--font-display); font-weight:400; font-size:16px;
+  letter-spacing:0.5px; fill:#E5E5E5;
+}
+.fp-label-lg{ font-size:20px; }
+
+/* Prototype reveal: lines draw out from Taiwan, then city markers fade in.
+   Reversible — scrolling the section out of view resets .in-view. */
+.fp-line{
+  stroke-dasharray:1; stroke-dashoffset:1;
+  transition:stroke-dashoffset 0.9s cubic-bezier(0.22,0.61,0.36,1);
+}
+.fp-city{ opacity:0; transition:opacity 0.5s ease; }
+
+.footprint.in-view .fp-line{ stroke-dashoffset:0; }
+.footprint.in-view .fp-city{ opacity:1; }
+
+/* stagger: each line draws, then its endpoint city label appears */
+.fp-lines .fp-line:nth-of-type(1){ transition-delay:0.20s; }
+.fp-lines .fp-line:nth-of-type(2){ transition-delay:0.35s; }
+.fp-lines .fp-line:nth-of-type(3){ transition-delay:0.50s; }
+.fp-lines .fp-line:nth-of-type(4){ transition-delay:0.65s; }
+/* city <g> are the 2nd–5th <g> in the svg (fp-lines is 1st, fp-origin last) */
+.fp-city:nth-of-type(2){ transition-delay:0.70s; }
+.fp-city:nth-of-type(3){ transition-delay:0.85s; }
+.fp-city:nth-of-type(4){ transition-delay:1.00s; }
+.fp-city:nth-of-type(5){ transition-delay:1.15s; }
+
+@media (max-width:1024px){
+  .footprint-map{ width:64%; }
+}
+@media (max-width:768px){
+  .footprint{ align-items:center; text-align:left; }
+  .footprint-map{
+    top:auto; bottom:8%; right:-6%; transform:none;
+    width:96%; opacity:0.5;
+  }
+  .footprint-content{ padding-top:120px; padding-bottom:120px; }
+  .footprint-content p br{ display:none; }
+}
