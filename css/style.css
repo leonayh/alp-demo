@@ -330,3 +330,17 @@ a{ color:inherit; }
   .footprint-content{ padding-top:120px; padding-bottom:120px; }
   .footprint-content p br{ display:none; }
 }
+
+/* ===== Large / ultrawide screens (>1920) — letterbox =====
+   Above 1920 the page does NOT stretch: the content is capped to a fixed
+   1920px stage and centred, with pure-black bars filling the left/right.
+   The layout inside the stage is identical to the 1920 design.
+
+   Note: fixed UI (nav, progress bar) uses `--edge`, which resolves to
+   (viewport-side-margin + 48px) here — because --container-max (1824) is
+   exactly 1920 - 2×48 — so they line up to the 1920 stage's 48px gutter
+   automatically, no extra offsets needed. */
+@media (min-width:1920px){
+  html{ background:#000; }                 /* the black letterbox bars */
+  body{ max-width:1920px; margin:0 auto; } /* fixed, centred stage */
+}
